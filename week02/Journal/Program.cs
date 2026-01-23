@@ -1,5 +1,6 @@
 using System;
 
+
 /// <summary>
 /// Journal Program - Helps users record daily events with prompts
 /// 
@@ -52,6 +53,7 @@ class Program
         }
     }
 
+
     /// <summary>
     /// Displays the main menu options.
     /// </summary>
@@ -100,6 +102,7 @@ class Program
 
         journal.SaveToFile(filename);
     }
+
 
     /// <summary>
     /// Prompts the user for a filename and loads the journal.
