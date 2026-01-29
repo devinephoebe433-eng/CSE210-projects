@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 class Program
+
 {
     static void Main(string[] args)
     {
@@ -46,6 +47,7 @@ class Program
         // There are several ways to do this, such as sorting the list
         
         int max = numbers[0];
+        
 
         foreach (int number in numbers)
         {
