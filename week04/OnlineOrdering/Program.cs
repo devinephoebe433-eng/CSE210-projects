@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 class Program
 {
+    public Program()
+    {
+    }
+
     static void Main()
     {
         // Order 1: USA
