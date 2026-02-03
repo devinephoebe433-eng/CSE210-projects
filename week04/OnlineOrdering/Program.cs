@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-class Program
-{
-    public Program()
-    {
-    }
 
+internal class NewBaseType
+{
     static void Main()
     {
         // Order 1: USA
@@ -31,5 +28,12 @@ class Program
             Console.WriteLine($"Total Price: ${order.CalculateTotal():0.00}");
             Console.WriteLine(new string('-', 30));
         }
+    }
+}
+
+class Program : NewBaseType
+{
+    public Program()
+    {
     }
 }
