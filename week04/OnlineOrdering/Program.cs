@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-internal class NewBaseType
+class Program
 {
     static void Main()
     {
@@ -31,9 +31,3 @@ internal class NewBaseType
     }
 }
 
-class Program : NewBaseType
-{
-    public Program()
-    {
-    }
-}
