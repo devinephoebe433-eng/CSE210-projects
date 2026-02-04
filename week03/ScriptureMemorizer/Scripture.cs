@@ -54,6 +54,7 @@ public class Scripture
             int randomIndex = random.Next(unhiddenWords.Count);
             unhiddenWords[randomIndex].Hide();
         }
+        
     }
 
     /// <summary>
