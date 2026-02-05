@@ -44,6 +44,7 @@ class Program
 
             // Hide a random word
             scripture.HideRandomWord();
+            
         }
     }
 }
