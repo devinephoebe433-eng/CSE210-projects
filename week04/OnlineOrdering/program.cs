@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Generic;
 
 class Program
 {
@@ -29,6 +28,5 @@ class Program
             Console.WriteLine($"Total Price: ${order.CalculateTotal():0.00}");
             Console.WriteLine(new string('-', 30));
         }
-        
     }
 }
