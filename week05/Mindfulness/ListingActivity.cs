@@ -47,5 +47,6 @@ class ListingActivity : Activity
         Console.WriteLine($"\n\nYou listed {items.Count} items!");
         
         EndActivity();
+        
     }
 }

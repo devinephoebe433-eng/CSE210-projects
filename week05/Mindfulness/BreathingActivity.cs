@@ -25,5 +25,6 @@ class BreathingActivity : Activity
         }
         
         EndActivity();
+        
     }
 }

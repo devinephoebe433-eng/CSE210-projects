@@ -51,6 +51,7 @@ class Activity
             spinIndex = (spinIndex + 1) % spinner.Length;
         }
         Console.WriteLine();
+        
     }
 
     protected void DisplayCountdown(int seconds)

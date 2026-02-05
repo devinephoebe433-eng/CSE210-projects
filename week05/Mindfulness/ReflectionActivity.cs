@@ -19,6 +19,7 @@ class ReflectionActivity : Activity
 
         _questions = new List<string>
         {
+            
             "Why was this experience meaningful to you?",
             "Have you ever done anything like this before?",
             "How did you get started?",
