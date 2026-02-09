@@ -2,50 +2,61 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+/// <summary>
+/// Represents a journal containing multiple entries.
+/// </summary>
 public class Journal
 {
-    public List<Entry> _entries = new List<Entry>();
+    private List<Entry> _entries = new List<Entry>();
 
+    /// <summary>
+    /// Adds a new entry to the journal.
+    /// </summary>
     public void AddEntry(Entry newEntry)
     {
         _entries.Add(newEntry);
     }
 
+    /// <summary>
+    /// Displays all entries in the journal.
+    /// </summary>
     public void DisplayAll()
     {
-        foreach (Entry entry in _entries)
+        foreach (var entry in _entries)
         {
             entry.Display();
         }
     }
 
-    public void SaveToFile(string file)
+    /// <summary>
+    /// Saves all journal entries to a file.
+    /// </summary>
+    public void SaveToFile(string fileName)
     {
-        using (StreamWriter outputFile = new StreamWriter(file))
+        using (StreamWriter outputFile = new StreamWriter(fileName))
         {
-            foreach (Entry entry in _entries)
+            foreach (var entry in _entries)
             {
-                // Using a pipe | as a separator to avoid issues with commas
-                outputFile.WriteLine($"{entry._date}|{entry._promptText}|{entry._entryText}");
+                outputFile.WriteLine(entry.ToCsvFormat());
             }
         }
-        Console.WriteLine("Journal saved successfully.");
     }
 
-    public void LoadFromFile(string file)
+    /// <summary>
+    /// Loads journal entries from a file, replacing current entries.
+    /// </summary>
+    public void LoadFromFile(string fileName)
     {
-        _entries.Clear(); // Clear current entries before loading new ones
-        string[] lines = System.IO.File.ReadAllLines(file);
-
+        _entries.Clear();
+        string[] lines = File.ReadAllLines(fileName);
         foreach (string line in lines)
         {
-            string[] parts = line.Split("|");
+            string[] parts = line.Split('|');
             if (parts.Length == 3)
             {
-                Entry loadedEntry = new Entry(parts[0], parts[1], parts[2]);
-                _entries.Add(loadedEntry);
+                Entry entry = new Entry(parts[0], parts[1], parts[2]);
+                _entries.Add(entry);
             }
         }
-        Console.WriteLine("Journal loaded successfully.");
     }
 }

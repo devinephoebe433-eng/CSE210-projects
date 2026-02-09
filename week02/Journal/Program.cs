@@ -1,73 +1,74 @@
 using System;
 
-/*
- * EXCEEDING REQUIREMENTS:
- * 1. Added a 'Clear' option (Menu choice 5) to wipe the current session's memory without deleting files.
- * 2. Included a safety check in the Journal.LoadFromFile method to handle empty or corrupted lines.
- * 3. Expanded the prompt list to include more thought-provoking personal reflection questions.
- */
-
+/// <summary>
+/// The main program class for managing the journal application.
+/// </summary>
 class Program
 {
     static void Main(string[] args)
     {
-        Journal myJournal = new Journal();
-        PromptGenerator promptGen = new PromptGenerator();
-        
-        // choice is a local variable, so it uses camelCase
-        string userChoice = "";
+        Journal journal = new Journal();
+        PromptGenerator promptGenerator = new PromptGenerator();
 
-        Console.WriteLine("Welcome to the Journal Program!");
-
-        while (userChoice != "6")
+        while (true)
         {
-            Console.WriteLine("\nPlease select one of the following choices:");
-            Console.WriteLine("1. Write");
-            Console.WriteLine("2. Display");
-            Console.WriteLine("3. Load");
-            Console.WriteLine("4. Save");
-            Console.WriteLine("5. Clear Current Journal"); // Creativity addition
-            Console.WriteLine("6. Quit");
-            Console.Write("What would you like to do? ");
-            
-            userChoice = Console.ReadLine();
+            Console.WriteLine("\nJournal Menu:");
+            Console.WriteLine("1. Write a new entry");
+            Console.WriteLine("2. Display the journal");
+            Console.WriteLine("3. Save the journal to a file");
+            Console.WriteLine("4. Load the journal from a file");
+            Console.WriteLine("5. Quit");
+            Console.Write("Choose an option: ");
+            string choice = Console.ReadLine();
 
-            if (userChoice == "1")
+            if (choice == "1")
             {
-                string prompt = promptGen.GetRandomPrompt();
-                Console.WriteLine($"\n{prompt}");
-                Console.Write("> ");
+                string prompt = promptGenerator.GetRandomPrompt();
+                Console.WriteLine($"\nPrompt: {prompt}");
+                Console.Write("Your response: ");
                 string response = Console.ReadLine();
                 string date = DateTime.Now.ToShortDateString();
-
-                // Creating a new Entry object using the constructor
                 Entry newEntry = new Entry(date, prompt, response);
-                myJournal.AddEntry(newEntry);
+                journal.AddEntry(newEntry);
+                Console.WriteLine("Entry added successfully.");
             }
-            else if (userChoice == "2")
+            else if (choice == "2")
             {
-                myJournal.DisplayAll();
+                Console.WriteLine("\nDisplaying all journal entries:");
+                journal.DisplayAll();
             }
-            else if (userChoice == "3")
+            else if (choice == "3")
             {
-                Console.Write("What is the filename? ");
-                string filename = Console.ReadLine();
-                myJournal.LoadFromFile(filename);
+                Console.Write("Enter filename to save (e.g., journal.txt): ");
+                string fileName = Console.ReadLine();
+                journal.SaveToFile(fileName);
+                Console.WriteLine("Journal saved successfully.");
             }
-            else if (userChoice == "4")
+            else if (choice == "4")
             {
-                Console.Write("What is the filename? ");
-                string filename = Console.ReadLine();
-                myJournal.SaveToFile(filename);
+                Console.Write("Enter filename to load (e.g., journal.txt): ");
+                string fileName = Console.ReadLine();
+                try
+                {
+                    journal.LoadFromFile(fileName);
+                    Console.WriteLine("\nJournal loaded successfully.");
+                    Console.WriteLine("\nDisplaying loaded journal entries:");
+                    journal.DisplayAll(); // Automatically display entries after loading
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading journal: {ex.Message}");
+                }
             }
-            else if (userChoice == "5")
+            else if (choice == "5")
             {
-                // Logic for the creativity requirement
-                myJournal._entries.Clear();
-                Console.WriteLine("Journal cleared from memory.");
+                Console.WriteLine("Goodbye");
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Invalid option, please try again.");
             }
         }
-
-        Console.WriteLine("Farewell. Keep writing!");
     }
 }
