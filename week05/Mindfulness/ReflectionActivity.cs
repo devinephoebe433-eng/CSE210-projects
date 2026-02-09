@@ -29,6 +29,7 @@ class ReflectionActivity : Activity
             "What could you learn from this experience that applies to other situations?",
             "What did you learn about yourself through this experience?",
             "How can you keep this experience in mind in the future?"
+            
         };
     }
 
