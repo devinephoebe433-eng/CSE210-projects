@@ -18,7 +18,11 @@ public class GoalManager
         bool running = true;
         while (running)
         {
-            Console.WriteLine("\nEternal Quest: Goal Tracking");
+            int level = GetLevel(_score);
+            Console.WriteLine("\n╔═════════════════════════════════════╗");
+            Console.WriteLine($"║ Eternal Quest: Level {level} - {GetRank(level)}");
+            Console.WriteLine($"║ Score: {_score} points");
+            Console.WriteLine("╚═════════════════════════════════════╝");
             Console.WriteLine("1. Display Goals");
             Console.WriteLine("2. Record Progress");
             Console.WriteLine("3. Create a New Goal");
@@ -47,6 +51,7 @@ public class GoalManager
                     break;
                 case "6":
                     running = false;
+                    Console.WriteLine("Thanks for using Eternal Quest! Keep working towards your goals!");
                     break;
                 default:
                     Console.WriteLine("Invalid choice, try again.");
@@ -57,37 +62,97 @@ public class GoalManager
 
     private void ListGoalDetails()
     {
-        Console.WriteLine("\nYour Goals:");
-        foreach (var goal in _goals)
+        Console.WriteLine("\n========== Your Goals ==========");
+        if (_goals.Count == 0)
         {
-            Console.WriteLine(goal.GetDetailsString());
+            Console.WriteLine("No goals yet. Create one to get started!");
         }
-        Console.WriteLine($"Total Score: {_score}");
+        else
+        {
+            foreach (var goal in _goals)
+            {
+                Console.WriteLine(goal.GetDetailsString());
+            }
+        }
+        Console.WriteLine();
+        DisplayScore();
+        Console.WriteLine("================================");
+    }
+
+    private void DisplayScore()
+    {
+        int level = GetLevel(_score);
+        string rank = GetRank(level);
+        Console.WriteLine($"Total Score: {_score} points | Level {level} - {rank}");
+    }
+
+    private int GetLevel(int score)
+    {
+        return Math.Max(1, (score / 500) + 1); // Level up every 500 points
+    }
+
+    private string GetRank(int level)
+    {
+        return level switch
+        {
+            1 => "Beginner",
+            2 => "Learner",
+            3 => "Practitioner",
+            4 => "Warrior",
+            5 => "Champion",
+            6 => "Sage",
+            7 => "Master",
+            8 => "Grand Master",
+            _ => "Eternal Rishi"
+        };
     }
 
     private void RecordEvent()
     {
-        Console.WriteLine("Enter the number of the goal you completed:");
+        if (_goals.Count == 0)
+        {
+            Console.WriteLine("No goals to record. Create a goal first!");
+            return;
+        }
+
+        Console.WriteLine("\nEnter the number of the goal you completed:");
         for (int i = 0; i < _goals.Count; i++)
         {
             Console.WriteLine($"{i + 1}. {_goals[i].GetDetailsString()}");
         }
 
-        int choice = int.Parse(Console.ReadLine()) - 1;
-        if (choice >= 0 && choice < _goals.Count)
-        {
-            _score += _goals[choice].RecordEvent();
-            Console.WriteLine("Progress recorded!");
-        }
-        else
+        if (!int.TryParse(Console.ReadLine(), out int choice) || choice < 1 || choice > _goals.Count)
         {
             Console.WriteLine("Invalid selection.");
+            return;
+        }
+
+        int oldLevel = GetLevel(_score);
+        int pointsEarned = _goals[choice - 1].RecordEvent();
+        _score += pointsEarned;
+        int newLevel = GetLevel(_score);
+
+        Console.WriteLine($"\nProgress recorded! You earned {pointsEarned} points!");
+
+        if (newLevel > oldLevel)
+        {
+            Console.WriteLine($"\n✨ LEVEL UP! You are now Level {newLevel} - {GetRank(newLevel)}! ✨");
+        }
+
+        if (_goals[choice - 1].IsComplete())
+        {
+            Console.WriteLine($"🎯 Goal '{_goals[choice - 1].GetName()}' is now complete!");
         }
     }
 
     private void CreateGoal()
     {
-        Console.WriteLine("Choose Goal Type:\n1. Simple\n2. Eternal\n3. Checklist");
+        Console.WriteLine("\nChoose Goal Type:");
+        Console.WriteLine("1. Simple (Complete once, then done)");
+        Console.WriteLine("2. Eternal (Repeats forever, never complete)");
+        Console.WriteLine("3. Checklist (Must complete X times)");
+        Console.WriteLine("4. Progress (Work towards a large goal)");
+        Console.WriteLine("5. Bad Habit (Lose points each time)");
         string type = Console.ReadLine();
 
         Console.Write("Enter goal name: ");
@@ -112,10 +177,19 @@ public class GoalManager
                 int bonus = int.Parse(Console.ReadLine());
                 _goals.Add(new ChecklistGoal(name, description, points, target, bonus));
                 break;
+            case "4":
+                Console.Write("Enter goal target (e.g., 10 for 10 km run): ");
+                int goalTarget = int.Parse(Console.ReadLine());
+                _goals.Add(new ProgressGoal(name, description, points, goalTarget));
+                break;
+            case "5":
+                _goals.Add(new BadHabitGoal(name, description, points));
+                break;
             default:
                 Console.WriteLine("Invalid option.");
                 break;
         }
+        Console.WriteLine("Goal created!");
     }
 
     private void SaveGoals()
@@ -152,6 +226,12 @@ public class GoalManager
                         break;
                     case "ChecklistGoal":
                         _goals.Add(new ChecklistGoal(parts[1], parts[2], int.Parse(parts[3]), int.Parse(parts[4]), int.Parse(parts[5]), int.Parse(parts[6])));
+                        break;
+                    case "ProgressGoal":
+                        _goals.Add(new ProgressGoal(parts[1], parts[2], int.Parse(parts[3]), double.Parse(parts[4]), double.Parse(parts[5])));
+                        break;
+                    case "BadHabitGoal":
+                        _goals.Add(new BadHabitGoal(parts[1], parts[2], int.Parse(parts[3])));
                         break;
                 }
             }

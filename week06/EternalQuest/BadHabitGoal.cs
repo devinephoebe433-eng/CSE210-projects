@@ -1,22 +1,30 @@
 public class BadHabitGoal : Goal
 {
-    public BadHabitGoal(string name, string description, int penalty)
-        : base(name, description, -penalty) { }
+    private int _penalty;
 
-    public override int RecordEvent() // Now returns int
+    public BadHabitGoal(string name, string description, int penalty)
+        : base(name, description, -penalty)
     {
-        _points -= 10;
-        return -10; // Return the points lost
+        _penalty = penalty;
     }
 
+    public override int RecordEvent()
+    {
+        return -_penalty; // Return negative points
+    }
 
     public override bool IsComplete()
     {
-        return false;
+        return false; // Bad habits are never complete
+    }
+
+    public override string GetDetailsString()
+    {
+        return $"[ ] {_name} ({_description}) -- Penalty: -{_penalty} points";
     }
 
     public override string GetStringRepresentation()
     {
-        return $"BadHabitGoal:{_name},{_description},{_points}";
+        return $"BadHabitGoal,{_name},{_description},{_penalty}";
     }
 }

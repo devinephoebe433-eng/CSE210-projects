@@ -15,6 +15,11 @@ public class EternalGoal : Goal
         return false; // Never complete
     }
 
+    public override string GetDetailsString()
+    {
+        return $"[ ] {_name} ({_description}) -- (Eternal, repeats forever)";
+    }
+
     public override string GetStringRepresentation()
     {
         return $"EternalGoal,{_name},{_description},{_points}";
